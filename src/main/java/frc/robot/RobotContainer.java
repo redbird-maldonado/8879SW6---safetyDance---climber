@@ -24,14 +24,17 @@ public class RobotContainer {
 	private final elevator elevator;
 	private final Intake intake;
 	private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-	private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular v
+	private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
+																						// max angular v
 
 	/* Setting up bindings for necessary control of the swerve drive platform */
 	private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
 			.withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 10% deadband
 			.withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-	// private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-	// private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+	// private final SwerveRequest.SwerveDriveBrake brake = new
+	// SwerveRequest.SwerveDriveBrake();
+	// private final SwerveRequest.PointWheelsAt point = new
+	// SwerveRequest.PointWheelsAt();
 	private final Telemetry logger = new Telemetry(MaxSpeed);
 	private final CommandXboxController driverController = new CommandXboxController(0);
 	private final CommandXboxController operatorController = new CommandXboxController(1);
@@ -70,14 +73,13 @@ public class RobotContainer {
 						.withRotationalRate(-driverController.getRightX() * MaxAngularRate)
 				// Drive counterclockwise with negative X (left)
 				));
-		//  DRIVER BRAKE!!
+		// DRIVER BRAKE!!
 		// driverController.b().whileTrue(drivetrain.applyRequest(() -> brake));
 		// driverController.leftTrigger().whileTrue(drivetrain.applyRequest(
 		// () -> point.withModuleDirection(new Rotation2d(
 		// -driverController.getLeftY(),
 		// -driverController.getLeftX()))));
 
-		// SOOO TIRED ZZZZZ IMA JUST COMMENT OUT THIS ROUTINE
 		// Run SysId routines when holding back/start and X/Y.
 		// Note that each routine should be run exactly once in a single log.
 		// driverController.back().and(driverController.y())
@@ -89,11 +91,6 @@ public class RobotContainer {
 		// driverController.start().and(driverController.x())
 		// .whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-		// I'M GOING TO COMMENT OUT HERE, THEN LIFT THIS COMMAND TO THE START OF
-		// THE ROBOT BINDINGS CONFIGURATION -- REMOVING THE COMMAND FROM THE DRIVER'S
-		// CONTROLLER
-		// SO IT RUNS ONCE WHEN THE ROBOT INITIALIZES... THE ASSUMPTION IS (JUST USE THE
-		// FORCE, LUKE :P)
 		// reset the field-centric heading on left bumper press
 		// driverController.leftBumper().onTrue(drivetrain.runOnce(() ->
 		// drivetrain.seedFieldCentric()));
@@ -120,19 +117,21 @@ public class RobotContainer {
 		Command wristZeroCommand = new RunCommand(() -> intake.wristAngle(Constants.ZERO_ANGLE), intake);
 		driverController.x().onTrue(wristZeroCommand);
 
-		// zero ele incremental
-		// Command zero_ele_inc = new RunCommand(() ->
-		// elevator.setPosition(elevator.getPosition()-0.5), elevator);
-		// driverController.a().onTrue(zero_ele_inc);
-	
+		// ELEVATOR MANUAL UP-DOWN
+		Command manualEleUpCommand = new StartEndCommand(() -> elevator.setVoltage(.05),
+				() -> elevator.setVoltage(0), elevator);
+		operatorController.povUp().whileTrue(manualEleUpCommand);
+		Command manualEleDownCommand = new StartEndCommand(() -> elevator.setVoltage(-.05),
+				() -> elevator.setVoltage(0), elevator);
+		operatorController.povDown().whileTrue(manualEleDownCommand);
 
 		// L0 state
+		Command liftToL0CommandEle = new RunCommand(() -> elevator.setPosition(Constants.L0_HEIGHT), elevator);
 		Command liftToL0Command = new RunCommand(() -> elevator.setPosition(Constants.L0_HEIGHT), elevator);
-		// Command wristToL0Command = new RunCommand(() -> intake.wristAngle(Constants.L0_ANGLE), intake);
-		// ParallelCommandGroup l0CommandGroup = new ParallelCommandGroup(liftToL0Command, wristToL0Command);
-		// operatorController.a().onTrue(l0CommandGroup);
-		driverController.a().onTrue(liftToL0Command); //added L0 to driver
-
+		Command wristToL0Command = new RunCommand(() -> intake.wristAngle(Constants.L0_ANGLE), intake);
+		ParallelCommandGroup l0CommandGroup = new ParallelCommandGroup(liftToL0Command, wristToL0Command);
+		operatorController.a().onTrue(l0CommandGroup);
+		driverController.a().onTrue(liftToL0CommandEle); // added L0 to driver
 
 		// L1 state
 		Command liftToL1Command = new RunCommand(() -> elevator.setPosition(Constants.L1_HEIGHT), elevator);
@@ -154,8 +153,6 @@ public class RobotContainer {
 
 		// KILL RUMBLE
 		// operatorController.setRumble(null, MaxAngularRate);
-
-		// MAP SLOW MODE TO A BUTTON ON DRIVER
 
 		// algae L-1 state
 		Command algae_lift_1 = new RunCommand(() -> elevator.setPosition(Constants.L1_HEIGHT_ALGAE), elevator);

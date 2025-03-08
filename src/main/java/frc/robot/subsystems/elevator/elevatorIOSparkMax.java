@@ -50,11 +50,9 @@ public class elevatorIOSparkMax implements elevatorIO {
 		leadConfig.closedLoop.pidf(.075, 0.000000015, 0, .0085) // I THINK THESE ARE TOO SLOW -- PLZ CHECK TYVM  start .027
 				.outputRange(-.8, .8); // THESE MAY ALSO NEED TO BE ADJUSTED
 		leadMotor.configure(leadConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
-
 		followerMotor.configure(followConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 		leadEncoder.setPosition(0);
-
 		followerEncoder.setPosition(0);
 	}
 

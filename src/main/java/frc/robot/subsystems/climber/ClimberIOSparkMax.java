@@ -21,7 +21,7 @@ public class ClimberIOSparkMax implements ClimberIO {
         configClimber
                 .inverted(false)
                 .idleMode(IdleMode.kBrake)
-                .smartCurrentLimit(60);
+                .smartCurrentLimit(40);
         configClimber.encoder
                 .positionConversionFactor(1000)
                 .velocityConversionFactor(1000);

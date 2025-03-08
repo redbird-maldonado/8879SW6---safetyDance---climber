@@ -16,8 +16,6 @@ public class Constants {
     public static final double CLIMBER_SPEED_DOWN = -.5;
     public static final double CLIMBER_SPEED_UP = .5;
 
-
-
     public static final double PROCESSOR_HEIGHT = 0;
     public static final double SOURCE_HEIGHT = 4.35;
     public static final double L0_HEIGHT = -0.5;
