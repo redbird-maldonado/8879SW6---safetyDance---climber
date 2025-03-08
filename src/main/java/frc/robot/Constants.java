@@ -2,7 +2,7 @@ package frc.robot;
 
 public class Constants {
     public static final double tau = 2.0 * Math.PI;
-//
+
     public static final double kElevatorGearRatio = 0.05; // 20:1 gear ratio on the two elevator motors
     public static final double kElevatorPositionFactor = kElevatorGearRatio * tau;
     public static final double kElevatorVelocityFactor = kElevatorPositionFactor / 60.0;
@@ -31,9 +31,6 @@ public class Constants {
     
     public static final double ZERO_ANGLE = 0;
 
-    // public static final double ZERO_ELEVATOR_INCREMENTAL = -.5;
-    // MR LORBER TALK TOO MUCH ACCCORDING TO HIS 6 PERIOD MEATHEADS
-    // NOT NONESENSE
     public static final double ARM_HEIGHT = 0.6; // NEED TO SET
     public static final double CLIMB_HEIGHT = 10; // NEED TO SET
 

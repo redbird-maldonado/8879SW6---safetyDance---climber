@@ -9,15 +9,11 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-// import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.subsystems.climber.Climber;
-// import frc.robot.subsystems.climber.climberIO;
 import frc.robot.subsystems.climber.ClimberIOSparkMax;
 import frc.robot.subsystems.intake.Intake;
-// import frc.robot.subsystems.intake.IntakeIO;
 import frc.robot.subsystems.intake.IntakeIOSparkMax;
 import frc.robot.subsystems.elevator.elevator;
-// import frc.robot.subsystems.elevator.elevatorIO;
 import frc.robot.subsystems.elevator.elevatorIOSparkMax;
 // import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
@@ -28,15 +24,13 @@ public class RobotContainer {
 	private final elevator elevator;
 	private final Intake intake;
 	private double MaxSpeed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-	private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
-																						// max
-																						// angular velocity
+	private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular v
 
 	/* Setting up bindings for necessary control of the swerve drive platform */
 	private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
 			.withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 10% deadband
 			.withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-	private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+	// private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
 	// private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 	private final Telemetry logger = new Telemetry(MaxSpeed);
 	private final CommandXboxController driverController = new CommandXboxController(0);
@@ -76,8 +70,8 @@ public class RobotContainer {
 						.withRotationalRate(-driverController.getRightX() * MaxAngularRate)
 				// Drive counterclockwise with negative X (left)
 				));
-
-		driverController.b().whileTrue(drivetrain.applyRequest(() -> brake));
+		//  DRIVER BRAKE!!
+		// driverController.b().whileTrue(drivetrain.applyRequest(() -> brake));
 		// driverController.leftTrigger().whileTrue(drivetrain.applyRequest(
 		// () -> point.withModuleDirection(new Rotation2d(
 		// -driverController.getLeftY(),
@@ -130,12 +124,15 @@ public class RobotContainer {
 		// Command zero_ele_inc = new RunCommand(() ->
 		// elevator.setPosition(elevator.getPosition()-0.5), elevator);
 		// driverController.a().onTrue(zero_ele_inc);
+	
 
 		// L0 state
 		Command liftToL0Command = new RunCommand(() -> elevator.setPosition(Constants.L0_HEIGHT), elevator);
-		Command wristToL0Command = new RunCommand(() -> intake.wristAngle(Constants.L0_ANGLE), intake);
-		ParallelCommandGroup l0CommandGroup = new ParallelCommandGroup(liftToL0Command, wristToL0Command);
-		operatorController.a().onTrue(l0CommandGroup);
+		// Command wristToL0Command = new RunCommand(() -> intake.wristAngle(Constants.L0_ANGLE), intake);
+		// ParallelCommandGroup l0CommandGroup = new ParallelCommandGroup(liftToL0Command, wristToL0Command);
+		// operatorController.a().onTrue(l0CommandGroup);
+		driverController.a().onTrue(liftToL0Command); //added L0 to driver
+
 
 		// L1 state
 		Command liftToL1Command = new RunCommand(() -> elevator.setPosition(Constants.L1_HEIGHT), elevator);
@@ -179,13 +176,11 @@ public class RobotContainer {
 
 		/* CLIMBER COMMANDS */
 		Command climberUpCommand = new StartEndCommand(() -> climber.setClimberVoltage(-12),
-				() -> climber.setClimberVoltage(0),
-				intake);
-		operatorController.povUp().whileTrue(climberUpCommand);
+				() -> climber.setClimberVoltage(0), climber);
+		driverController.y().whileTrue(climberUpCommand);
 		Command climberDownCommand = new StartEndCommand(() -> climber.setClimberVoltage(12),
-				() -> climber.setClimberVoltage(0),
-				intake);
-		operatorController.povDown().whileTrue(climberDownCommand);
+				() -> climber.setClimberVoltage(0), climber);
+		driverController.b().whileTrue(climberDownCommand);
 
 		// NICE TO HAVE - A COMMAND THAT PICKS UP BOTH THE ALGAE AND CORAL
 
