@@ -18,6 +18,7 @@ import frc.robot.subsystems.elevator.elevatorIOSparkMax;
 // import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import edu.wpi.first.wpilibj.DataLogManager;
 
 public class RobotContainer {
 	private final Climber climber;
@@ -29,7 +30,7 @@ public class RobotContainer {
 
 	/* Setting up bindings for necessary control of the swerve drive platform */
 	private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-			.withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.05) // Add a 10% deadband
+			.withDeadband(MaxSpeed * 0.05).withRotationalDeadband(MaxAngularRate * 0.02) // Add a 10% deadband
 			.withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
 	// private final SwerveRequest.SwerveDriveBrake brake = new
 	// SwerveRequest.SwerveDriveBrake();
@@ -41,6 +42,7 @@ public class RobotContainer {
 	public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
 	public RobotContainer() {
+		DataLogManager.start(); // start data log manager to log to driver station
 		climber = new Climber(new ClimberIOSparkMax());
 		elevator = new elevator(new elevatorIOSparkMax());
 		intake = new Intake(new IntakeIOSparkMax());

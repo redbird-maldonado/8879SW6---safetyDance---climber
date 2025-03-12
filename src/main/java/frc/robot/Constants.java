@@ -21,11 +21,11 @@ public class Constants {
     public static final double L0_HEIGHT = -0.5;
     public static final double L1_HEIGHT = 7.75; // 5
     public static final double L2_HEIGHT = 16; // 10
-    public static final double L3_HEIGHT = 23; //18
-    public static final double L4_HEIGHT = 21;
+    public static final double L3_HEIGHT = 25.1; //18
+    // public static final double L4_HEIGHT = 21; not mapped
     
     public static final double L1_HEIGHT_ALGAE = 10.15; // 9.25
-    public static final double L2_HEIGHT_ALGAE = 17; // 10
+    public static final double L2_HEIGHT_ALGAE = 19; // 17
     
     public static final double ZERO_ANGLE = 0;
 
@@ -34,10 +34,10 @@ public class Constants {
 
     public static final double PROCESSOR_ANGLE = 0.5; // TEST VALUE FOR THE WRIST (1 was about 50°)///////////////////
     public static final double SOURCE_ANGLE = 0.8;
-    public static final double L0_ANGLE = 1.56;    // 1.3
-    public static final double L1_ANGLE = 1.60;    // 1.85
-    public static final double L2_ANGLE = 1.50; //1.85
-    public static final double L3_ANGLE = 1.35; //.5
-    public static final double L4_ANGLE = 0.26; //.26
+    public static final double L0_ANGLE = 1.53;    // 1.56
+    public static final double L1_ANGLE = 1.49;    // 1.85
+    public static final double L2_ANGLE = 1.49; //1.85
+    public static final double L3_ANGLE = 1.1; //.5
+    // public static final double L4_ANGLE = 0.26; //.26 not mapped
     public static final double TOP_ALGAE_ANGLE = 0;
 }

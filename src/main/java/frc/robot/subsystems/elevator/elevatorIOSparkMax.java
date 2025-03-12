@@ -3,6 +3,9 @@ package frc.robot.subsystems.elevator;
 import com.revrobotics.spark.SparkBase.ControlType;
 import com.revrobotics.spark.SparkBase.PersistMode;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+
+import edu.wpi.first.wpilibj.DataLogManager;
+
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.SparkClosedLoopController;
@@ -65,6 +68,7 @@ public class elevatorIOSparkMax implements elevatorIO {
 	@Override
 	public double getPosition() {
 		// Get the position from the encoder
+		DataLogManager.log(String.valueOf(leadEncoder.getPosition()));
 		return leadEncoder.getPosition();
 	}
 
